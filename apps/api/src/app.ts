@@ -34,6 +34,18 @@ const CORS_ORIGINS = process.env.CORS_ORIGINS
   : ["http://localhost:3000"];
 
 const app = new Hono<AppEnv>();
+app.use(
+  "*",
+  cors({
+    origin: [
+      "https://ateapos-web.vercel.app/",
+      "http://localhost:3000",
+    ],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 // Global middleware
 app.use(
