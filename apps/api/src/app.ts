@@ -38,7 +38,7 @@ app.use(
   "*",
   cors({
     origin: [
-      "https://ateapos-web.vercel.app/",
+      "https://ateapos-web.vercel.app",
       "http://localhost:3000",
     ],
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
