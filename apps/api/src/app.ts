@@ -29,11 +29,8 @@ import { customer } from "./routes/customer.js";
 import { uploads } from "./routes/uploads.js";
 import { coupons } from "./routes/coupons.js";
 
-const CORS_ORIGINS = process.env.CORS_ORIGINS
-  ? process.env.CORS_ORIGINS.split(",")
-  : ["http://localhost:3000"];
-
 const app = new Hono<AppEnv>();
+
 app.use(
   "*",
   cors({
@@ -41,26 +38,18 @@ app.use(
       "https://ateapos-web.vercel.app",
       "http://localhost:3000",
     ],
-    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
-
-// Global middleware
-app.use(
-  "*",
-  cors({
-    origin: (origin) => {
-      if (CORS_ORIGINS.includes(origin)) return origin;
-      return CORS_ORIGINS[0];
-    },
-    credentials: true,
-    allowHeaders: ["Content-Type", "Authorization", "X-Requested-With", "X-Branch-Id"],
     allowMethods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization", "X-Requested-With", "X-Branch-Id"],
+    credentials: true,
     maxAge: 86400,
   })
 );
+
+app.options("*", (c) => {
+  return c.text("", 204);
+});
+
+// Global middleware
 app.use("*", secureHeaders());
 app.use("*", logger());
 app.onError(errorHandler);
@@ -73,7 +62,7 @@ app.route("/health", health);
 app.route("/api/auth", auth);
 app.route("/api/customer", customer);
 
-// Protected routes (auth middleware applied within each route module)
+// Protected routes
 app.route("/api/orgs", orgs);
 app.route("/api/branches", branches);
 app.route("/api/menu", menu);
