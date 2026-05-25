@@ -4,7 +4,7 @@ import { redis } from "./lib/redis.js";
 import { wsManager } from "./ws/manager.js";
 import { handleWsMessage } from "./ws/handlers.js";
 
-const port = parseInt(process.env.PORT || "3001");
+const port = parseInt(process.env.API_PORT || "3001");
 
 const server = Bun.serve({
   port,
